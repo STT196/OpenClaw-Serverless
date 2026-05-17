@@ -35,8 +35,13 @@ spec:
               value: "lan"
             - name: OPENCLAW_GATEWAY_TOKEN
               value: "{{ .Values.gatewayAuthToken }}"
+            - name: OPENCLAW_CONFIG_PATH
+              value: "/etc/openclaw/openclaw.json"
 
           volumeMounts:
+            - name: config
+              mountPath: /etc/openclaw
+              readOnly: true
             - name: data
               mountPath: /home/node/.openclaw
 
@@ -55,6 +60,9 @@ spec:
             timeoutSeconds: 5
 
       volumes:
+        - name: config
+          configMap:
+            name: openclaw-config
         - name: data
           persistentVolumeClaim:
             claimName: openclaw-pvc
