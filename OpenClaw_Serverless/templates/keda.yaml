@@ -47,6 +47,6 @@ spec:
   cooldownPeriod: 60
   triggers:
     - type: cpu
+      metricType: Utilization
       metadata:
-        type: Utilization
         value: "60"
