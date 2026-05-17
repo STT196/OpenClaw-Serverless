@@ -27,7 +27,7 @@ spec:
   scaleTargetRef:
     name: openclaw-serverless
     service: openclaw-service
-    port: 1879
+    port: 18789
 
   replicas:
     min: 1

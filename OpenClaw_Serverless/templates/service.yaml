@@ -7,6 +7,6 @@ spec:
     app: openclaw
   ports:
     - protocol: TCP
-      port: 1879
-      targetPort: 1879
+      port: 18789
+      targetPort: 18789
   type: ClusterIP

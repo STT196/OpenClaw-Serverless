@@ -16,7 +16,7 @@ spec:
         - name: openclaw-serverless
           image: alpine/openclaw:main
           ports:
-            - containerPort: 1879
+            - containerPort: 18789
           resources:
             requests:
               cpu: 400m
