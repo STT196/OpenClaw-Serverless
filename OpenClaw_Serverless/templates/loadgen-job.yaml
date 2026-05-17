@@ -1,0 +1,20 @@
+{{- if .Values.loadgen.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: openclaw-loadgen
+  namespace: {{ .Values.namespace }}
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: loadgen
+          image: {{ .Values.loadgen.image }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - >-
+              seq 1 {{ .Values.loadgen.requests }} | xargs -P {{ .Values.loadgen.concurrency }} -I{} sh -c
+              'curl -s -o /dev/null -w "%{http_code}\n" {{ .Values.loadgen.url }}' >/dev/null
+{{- end }}
