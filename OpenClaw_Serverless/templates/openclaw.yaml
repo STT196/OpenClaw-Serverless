@@ -16,7 +16,7 @@ spec:
       containers:
         - name: openclaw-serverless
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
 
           ports:
             - containerPort: {{ .Values.service.port }}
@@ -29,17 +29,17 @@ spec:
               cpu: {{ .Values.resources.limits.cpu }}
               memory: {{ .Values.resources.limits.memory }}
 
-          # Fix listening on all interfaces
+          # Ensure it listens on all interfaces
           env:
             - name: OPENCLAW_GATEWAY_BIND
               value: "lan"
 
-          command: ["/bin/sh", "-c"]
+          # Simpler command approach
+          command: ["sh", "-c"]
           args:
-            - |
-              echo "=== Setting OpenClaw to listen on all interfaces ==="
-              openclaw config set gateway.bind lan || true
-              openclaw config set gateway.port {{ .Values.service.port }} || true
+            - >
+              openclaw config set gateway.bind lan || true &&
+              openclaw config set gateway.port {{ .Values.service.port }} || true &&
               exec openclaw gateway start
 
           volumeMounts:
@@ -65,4 +65,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName
+            claimName: openclaw-pvc
