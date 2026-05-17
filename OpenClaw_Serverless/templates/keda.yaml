@@ -1,17 +1,38 @@
+# {{- if .Values.keda.enabled }}
+# apiVersion: http.keda.sh/v1beta1
+# kind: InterceptorRoute
+# metadata:
+#   name: openclaw
+#   namespace: {{ .Values.namespace }}
+# spec:
+#   target:
+#     service: openclaw-service
+#     port: {{ .Values.service.port }}
+#   rules:
+#     - hosts:
+#         - {{ .Values.ingress.host }}
+#       scalingMetric:
+#         concurrency:
+#           targetValue: {{ .Values.keda.targetPendingRequests | default 100 }}
+# {{- end }}
+
 {{- if .Values.keda.enabled }}
-apiVersion: http.keda.sh/v1beta1
-kind: InterceptorRoute
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
 metadata:
-  name: openclaw
+  name: openclaw-http-scaler
   namespace: {{ .Values.namespace }}
 spec:
-  target:
+  hosts:
+    - {{ .Values.ingress.host }}
+  replicas:
+    min: {{ .Values.keda.minReplicas }}
+    max: {{ .Values.keda.maxReplicas }}
+  targetPendingRequests: {{ .Values.keda.targetPendingRequests }}
+  scaleTargetRef:
+    name: openclaw-serverless
+    kind: Deployment
+    apiVersion: apps/v1
     service: openclaw-service
     port: {{ .Values.service.port }}
-  rules:
-    - hosts:
-        - {{ .Values.ingress.host }}
-      scalingMetric:
-        concurrency:
-          targetValue: {{ .Values.keda.targetPendingRequests | default 100 }}
 {{- end }}
