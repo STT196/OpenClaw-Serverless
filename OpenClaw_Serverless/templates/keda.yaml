@@ -3,7 +3,7 @@ kind: HTTPScaledObject
 metadata:
   name: openclaw-http-scaler
 spec:
-  host: openclaw.example.com # Must match the Ingress host
+  host: openclaw.localhost.com # Must match the Ingress host
   targetPendingRequests: 100
   scaleTargetRef:
     name: openclaw-serverless
