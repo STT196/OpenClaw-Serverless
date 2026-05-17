@@ -15,21 +15,6 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - >-
-              req={{ .Values.loadgen.requests }};
-              conc={{ .Values.loadgen.concurrency }};
-              url="{{ .Values.loadgen.url }}";
-              host="{{ .Values.loadgen.hostHeader }}";
-              i=1;
-              while [ $i -le $req ]; do
-                if [ -n "$host" ]; then
-                  curl -s -o /dev/null -H "Host: $host" "$url" &
-                else
-                  curl -s -o /dev/null "$url" &
-                fi;
-                if [ $((i % conc)) -eq 0 ]; then
-                  wait;
-                fi;
-                i=$((i+1));
-              done;
-              wait
+              seq 1 {{ .Values.loadgen.requests }} | xargs -P {{ .Values.loadgen.concurrency }} -I{} sh -c
+              'curl -s -o /dev/null -w "%{http_code}\n" {{ .Values.loadgen.url }}' >/dev/null
 {{- end }}
