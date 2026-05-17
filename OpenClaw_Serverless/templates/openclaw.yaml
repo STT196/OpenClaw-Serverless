@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openclaw-serverless
+  namespace: openclaw
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: openclaw
+  template:
+    metadata:
+      labels:
+        app: openclaw
+    spec:
+      containers:
+        - name: openclaw-serverless
+          image: alpine/openclaw:main
+          ports:
+            - containerPort: 1879
+          resources:
+            requests:
+              cpu: 400m
+              memory: 786Mi
+            limits:
+              cpu: 2000m
+              memory: 3Gi
+          volumeMounts:
+            - name: data
+              mountPath: /home/node/.openclaw
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: openclaw-pvc
+    
+
+         
+
+

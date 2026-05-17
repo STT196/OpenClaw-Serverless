@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: openclaw-ingress
+  namespace: openclaw
+  annotations:
+    # Essential for long-running simulation requests
+    traefik.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    traefik.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  ingressClassName: traefik # Or your specific provider (traefik, etc.)
+  rules:
+    - host: openclaw.localhost.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: keda-add-on-http-interceptor-proxy # Routes through KEDA
+                port:
+                  number: 80

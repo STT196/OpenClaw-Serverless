@@ -1,0 +1,17 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: openclaw-http-scaler
+  namespace: openclaw
+spec:
+  host: openclaw.example.com # Must match the Ingress host
+  targetPendingRequests: 100
+  scaleTargetRef:
+    name: openclaw-serverless
+    kind: Deployment
+    apiVersion: apps/v1
+    service: openclaw-service
+    port: 1879
+  replicas:
+    min: 0 # Enables Hibernation
+    max: 5

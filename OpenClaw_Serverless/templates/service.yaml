@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: openclaw-service
+  namespace: openclaw
+spec:
+  selector:
+    app: openclaw
+  ports:
+    - protocol: TCP
+      port: 1879
+      targetPort: 1879
+  type: ClusterIP
