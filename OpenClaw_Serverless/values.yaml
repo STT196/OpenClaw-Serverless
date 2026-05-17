@@ -18,7 +18,7 @@ resources:
 
 keda:
   enabled: true
-  minReplicas: 0
+  minReplicas: 1
   maxReplicas: 5
   targetPendingRequests: 100
 
