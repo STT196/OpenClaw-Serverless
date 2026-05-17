@@ -32,7 +32,7 @@ spec:
           # Just set the env var - let the original entrypoint handle it
           env:
             - name: OPENCLAW_GATEWAY_BIND
-              value: "lan"
+              value: "0.0.0.0"
 
           volumeMounts:
             - name: data
