@@ -12,6 +12,8 @@ spec:
     metadata:
       labels:
         app: openclaw
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       containers:
         - name: openclaw-serverless
