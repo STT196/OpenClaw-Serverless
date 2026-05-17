@@ -34,7 +34,8 @@ loadgen:
   image: curlimages/curl:8.8.0
   requests: 2000
   concurrency: 20
-  url: http://openclaw.localhost.com/
+  url: http://keda-add-ons-http-interceptor-proxy.openclaw.svc.cluster.local:8080/
+  hostHeader: openclaw.localhost.com
 
 networkPolicy:
   enabled: true
