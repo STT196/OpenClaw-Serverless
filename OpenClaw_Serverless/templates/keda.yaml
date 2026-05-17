@@ -2,7 +2,6 @@ apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
 metadata:
   name: openclaw-http-scaler
-  namespace: openclaw
 spec:
   host: openclaw.example.com # Must match the Ingress host
   targetPendingRequests: 100
