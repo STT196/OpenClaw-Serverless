@@ -16,6 +16,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: keda-add-ons-http-interceptor-proxy # Routes through KEDA
+                name: keda-interceptor
                 port:
                   number: 8080
