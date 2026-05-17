@@ -1,0 +1,10 @@
+service:
+  port: 18789
+
+resources:
+  requests:
+    cpu: 400m
+    memory: 786Mi
+  limits:
+    cpu: 2000m
+    memory: 3Gi
