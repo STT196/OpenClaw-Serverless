@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: openclaw-serverless
-  namespace: {{ .Values.namespace | default "openclaw" }}
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1  # KEDA will manage replicas
+  replicas: 1
   selector:
     matchLabels:
       app: openclaw
@@ -16,11 +16,11 @@ spec:
       containers:
         - name: openclaw-serverless
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
-          
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
           ports:
             - containerPort: {{ .Values.service.port }}
-          
+
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu }}
@@ -28,28 +28,24 @@ spec:
             limits:
               cpu: {{ .Values.resources.limits.cpu }}
               memory: {{ .Values.resources.limits.memory }}
-          
-          # Important: Make sure it listens on all interfaces
+
+          # Fix listening on all interfaces
           env:
             - name: OPENCLAW_GATEWAY_BIND
               value: "lan"
-            - name: OPENCLAW_GATEWAY_PORT
-              value: "{{ .Values.service.port }}"
-          
-          # Command to ensure correct binding
+
           command: ["/bin/sh", "-c"]
           args:
             - |
-              echo "Setting OpenClaw gateway bind to LAN..."
+              echo "=== Setting OpenClaw to listen on all interfaces ==="
               openclaw config set gateway.bind lan || true
               openclaw config set gateway.port {{ .Values.service.port }} || true
               exec openclaw gateway start
-          
+
           volumeMounts:
             - name: data
               mountPath: /home/node/.openclaw
-          
-          # Probes (very important for KEDA)
+
           readinessProbe:
             httpGet:
               path: /
@@ -57,8 +53,7 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 5
             timeoutSeconds: 5
-            failureThreshold: 5
-          
+
           livenessProbe:
             httpGet:
               path: /
@@ -66,9 +61,8 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 5
 
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: openclaw-pvc
+            claimName

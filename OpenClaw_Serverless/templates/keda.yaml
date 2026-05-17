@@ -1,25 +1,20 @@
+{{- if .Values.keda.enabled }}
 apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
 metadata:
   name: openclaw-http-scaler
-  namespace: openclaw
+  namespace: {{ .Values.namespace }}
 spec:
   hosts:
-    - openclaw.localhost.com
-
-  # Scaling behavior
+    - {{ .Values.ingress.host }}
   replicas:
-    min: 1          # Enables true scale-to-zero / hibernation
-    max: 5
-
-  targetPendingRequests: 100   # Scale up when ~100 requests are waiting
-
+    min: {{ .Values.keda.minReplicas }}
+    max: {{ .Values.keda.maxReplicas }}
+  targetPendingRequests: {{ .Values.keda.targetPendingRequests }}
   scaleTargetRef:
-    name: openclaw-serverless     # Deployment name
+    name: openclaw-serverless
     kind: Deployment
     apiVersion: apps/v1
-    service: openclaw-service     # Your app Service
-    port: 18789
-
-  # Optional: fine-tune cooldown
-  # scaledownPeriod: 300   # seconds before scaling down
+    service: openclaw-service
+    port: {{ .Values.service.port }}
+{{- end }}

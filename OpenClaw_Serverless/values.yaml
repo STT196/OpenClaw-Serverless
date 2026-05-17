@@ -1,3 +1,10 @@
+namespace: openclaw
+
+image:
+  repository: alpine/openclaw
+  tag: main
+  pullPolicy: IfNotPresent
+
 service:
   port: 18789
 
@@ -8,3 +15,17 @@ resources:
   limits:
     cpu: 2000m
     memory: 3Gi
+
+keda:
+  enabled: true
+  minReplicas: 0
+  maxReplicas: 5
+  targetPendingRequests: 100
+
+ingress:
+  enabled: true
+  host: openclaw.localhost.com
+  ingressClassName: traefik
+
+networkPolicy:
+  enabled: true
