@@ -1,21 +1,3 @@
-# {{- if .Values.keda.enabled }}
-# apiVersion: http.keda.sh/v1beta1
-# kind: InterceptorRoute
-# metadata:
-#   name: openclaw
-#   namespace: {{ .Values.namespace }}
-# spec:
-#   target:
-#     service: openclaw-service
-#     port: {{ .Values.service.port }}
-#   rules:
-#     - hosts:
-#         - {{ .Values.ingress.host }}
-#       scalingMetric:
-#         concurrency:
-#           targetValue: {{ .Values.keda.targetPendingRequests | default 100 }}
-# {{- end }}
-
 {{- if .Values.keda.enabled }}
 apiVersion: http.keda.sh/v1alpha1
 kind: HTTPScaledObject
