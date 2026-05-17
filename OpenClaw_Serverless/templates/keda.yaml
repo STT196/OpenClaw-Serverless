@@ -9,7 +9,7 @@ spec:
 
   # Scaling behavior
   replicas:
-    min: 0          # Enables true scale-to-zero / hibernation
+    min: 1          # Enables true scale-to-zero / hibernation
     max: 5
 
   targetPendingRequests: 100   # Scale up when ~100 requests are waiting
