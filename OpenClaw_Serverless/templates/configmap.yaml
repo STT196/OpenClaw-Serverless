@@ -12,5 +12,8 @@ data:
           mode: "token",
           token: "${OPENCLAW_GATEWAY_TOKEN}",
         },
+        controlUi: {
+          basePath: "/",
+        },
       },
     }
