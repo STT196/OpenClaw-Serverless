@@ -32,7 +32,9 @@ spec:
           # Just set the env var - let the original entrypoint handle it
           env:
             - name: OPENCLAW_GATEWAY_BIND
-              value: "0.0.0.0"
+              value: "lan"
+            # - name: OPENCLAW_GATEWAY_TOKEN
+            #   value: "{{ .Values.gatewayAuthToken }}"
 
           volumeMounts:
             - name: data

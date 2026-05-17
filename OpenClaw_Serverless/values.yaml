@@ -27,5 +27,7 @@ ingress:
   host: openclaw.localhost.com
   ingressClassName: traefik
 
+gatewayAuthToken: "change-me"
+
 networkPolicy:
   enabled: true
