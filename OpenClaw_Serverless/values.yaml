@@ -30,7 +30,7 @@ ingress:
 gatewayAuthToken: "rjifWEGMs0WYwXc6oCPEPGDr3jilYZdpgMvluLZ2sVo="
 
 loadgen:
-  enabled: false
+  enabled: true
   image: curlimages/curl:8.8.0
   requests: 2000
   concurrency: 20
