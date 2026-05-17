@@ -1,0 +1,20 @@
+{{- if .Values.keda.enabled }}
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: openclaw-http-scaler
+  namespace: {{ .Values.namespace }}
+spec:
+  hosts:
+    - {{ .Values.ingress.host }}
+  replicas:
+    min: {{ .Values.keda.minReplicas }}
+    max: {{ .Values.keda.maxReplicas }}
+  targetPendingRequests: {{ .Values.keda.targetPendingRequests }}
+  scaleTargetRef:
+    name: openclaw-serverless
+    kind: Deployment
+    apiVersion: apps/v1
+    service: openclaw-service
+    port: {{ .Values.service.port }}
+{{- end }}
