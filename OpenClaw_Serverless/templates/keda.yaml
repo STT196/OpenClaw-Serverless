@@ -1,52 +1,25 @@
-# apiVersion: http.keda.sh/v1alpha1
-# kind: HTTPScaledObject
-# metadata:
-#   name: openclaw-http-scaler
-# spec:
-#   host: openclaw.localhost.com # Must match the Ingress host
-#   targetPendingRequests: 100
-#   scaleTargetRef:
-#     name: openclaw-serverless
-#     kind: Deployment
-#     apiVersion: apps/v1
-#     service: openclaw-service
-#     port: 1879
-#   replicas:
-#     min: 0 # Enables Hibernation
-#     max: 5
-
-# apiVersion: http.keda.sh/v1alpha1
-# kind: HTTPScaledObject
-# metadata:
-#   name: openclaw-http-scaler
-#   namespace: openclaw
-
-# spec:
-#   host: openclaw.localhost.com
-
-#   scaleTargetRef:
-#     name: openclaw-serverless
-#     service: openclaw-service
-#     port: 18789
-
-#   replicas:
-#     min: 1
-#     max: 5
-
-apiVersion: keda.sh/v1alpha1
-kind: ScaledObject
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
 metadata:
-  name: openclaw-scaler
+  name: openclaw-http-scaler
   namespace: openclaw
 spec:
+  hosts:
+    - openclaw.localhost.com
+
+  # Scaling behavior
+  replicas:
+    min: 0          # Enables true scale-to-zero / hibernation
+    max: 5
+
+  targetPendingRequests: 100   # Scale up when ~100 requests are waiting
+
   scaleTargetRef:
-    name: openclaw-serverless
-  minReplicaCount: 1
-  maxReplicaCount: 5
-  pollingInterval: 15
-  cooldownPeriod: 60
-  triggers:
-    - type: cpu
-      metricType: Utilization
-      metadata:
-        value: "60"
+    name: openclaw-serverless     # Deployment name
+    kind: Deployment
+    apiVersion: apps/v1
+    service: openclaw-service     # Your app Service
+    port: 18789
+
+  # Optional: fine-tune cooldown
+  # scaledownPeriod: 300   # seconds before scaling down
