@@ -41,7 +41,7 @@ metadata:
 spec:
   scaleTargetRef:
     name: openclaw-serverless
-  minReplicaCount: 0
+  minReplicaCount: 1
   maxReplicaCount: 5
   pollingInterval: 15
   cooldownPeriod: 60
